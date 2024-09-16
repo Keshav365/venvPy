@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Blocking Template</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .header-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .header-details label {
+            font-weight: bold;
+            margin: 0 11px;
+        }
+
+        .header-details input[type="time"],
+        .header-details input[type="text"] {
+            width: 45%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        main {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .time-blocks {
+            width: 50%;
+        }
+
+        .time-grid {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .time-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .time-row span {
+            width: 50px;
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        .time-row input {
+            flex-grow: 1;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .side-section {
+            width: 45%;
+        }
+
+        .priorities,
+        .todo,
+        .memo,
+        .reflection {
+            margin-bottom: 20px;
+        }
+
+        .priorities ul,
+        .todo ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .priorities ul li,
+        .todo ul li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .priorities input[type="text"],
+        .todo input[type="text"] {
+            flex-grow: 1;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        textarea {
+            width: 95%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            height: 100px;
+        }
+
+        button {
+            display: block;
+            padding: 10px;
+            background-color: #5cb85c;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .button-group button {
+            width: 48%;
+        }
+
+        .date-header {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form id="time-blocking-form"
+            action="https://script.google.com/macros/s/AKfycbwT2P2AQ50YLR-UHgUNvxFB_1KSaI8BWvpNsP3cUOq-EA7VMfa7z_2SFEFw8ddBZ5igWQ/exec"
+            method="post">
+            <header>
+                <h1>TIME BLOCKING TEMPLATE</h1>
+                <div class="date-header" id="current-date"></div>
+                <div class="header-details">
+                    <label for="wake-time">Wake Time:</label>
+                    <input type="time" id="wake-time" name="wakeTime">
+                    <label for="mantra">Today's Mantra:</label>
+                    <input type="text" id="mantra" name="mantra" placeholder="Enter mantra">
+                </div>
+            </header>
+
+            <!-- Main Section -->
+            <main>
+                <!-- Time Blocks -->
+                <div class="time-blocks">
+                    <h2>Time Blocks</h2>
+                    <div class="time-grid" id="time-blocks">
+                        <!-- Time blocks will be inserted dynamically here -->
+                    </div>
+                </div>
+
+                <!-- Right Side: Priorities, To-Do List, Memo, Reflection -->
+                <div class="side-section">
+                    <div class="priorities">
+                        <h2>Priorities</h2>
+                        <ul id="priority-list">
+                            <li><input type="checkbox"> <input type="text" placeholder="Priority"></li>
+                        </ul>
+                        <div class="button-group">
+                            <button type="button" id="add-priority">+ Add Priority</button>
+                            <button type="button" id="remove-priority">- Remove Priority</button>
+                        </div>
+                    </div>
+
+                    <div class="todo">
+                        <h2>To-Do List</h2>
+                        <ul id="todo-list">
+                            <li><input type="checkbox"> <input type="text" placeholder="To-do item"></li>
+                        </ul>
+                        <div class="button-group">
+                            <button type="button" id="add-todo">+ Add To-Do Item</button>
+                            <button type="button" id="remove-todo">- Remove To-Do Item</button>
+                        </div>
+                    </div>
+
+                    <div class="memo">
+                        <h2>Memo</h2>
+                        <textarea id="memo" name="memo" placeholder="Add any notes..."></textarea>
+                    </div>
+
+                    <div class="reflection">
+                        <h2>Daily Reflection</h2>
+                        <textarea id="reflection" name="reflection"
+                            placeholder="Write your reflection here..."></textarea>
+                    </div>
+                </div>
+            </main>
+
+            <button type="submit">Save</button>
+        </form>
+    </div>
+
+    <script>
+        const timeBlockLabels = [
+            "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00",
+            "11:00", "12:00", "13:00", "14:00", "15:00", "16:00",
+            "17:00", "18:00", "19:00", "20:00", "21:00", "22:00",
+            "23:00"
+        ];
+
+        function createTimeBlocks() {
+            const timeGrid = document.getElementById('time-blocks');
+            timeBlockLabels.forEach((time, index) => {
+                const timeRow = document.createElement('div');
+                timeRow.className = 'time-row';
+                timeRow.innerHTML = `<span>${time}</span><input type="text" name="timeBlocks[${index}].task">`;
+                timeGrid.appendChild(timeRow);
+            });
+        }
+
+        function collectFormData() {
+            const wakeTime = document.getElementById('wake-time').value;
+            const mantra = document.getElementById('mantra').value;
+            const memo = document.getElementById('memo').value;
+            const reflection = document.getElementById('reflection').value;
+
+            const priorities = Array.from(document.querySelectorAll('#priority-list li')).map((item) => {
+                return {
+                    checked: item.querySelector('input[type="checkbox"]').checked,
+                    text: item.querySelector('input[type="text"]').value
+                };
+            });
+
+            const todos = Array.from(document.querySelectorAll('#todo-list li')).map((item) => {
+                return {
+                    checked: item.querySelector('input[type="checkbox"]').checked,
+                    text: item.querySelector('input[type="text"]').value
+                };
+            });
+
+            const timeBlockData = Array.from(document.querySelectorAll('.time-row input[type="text"]')).map((input, index) => {
+                return { time: timeBlockLabels[index], task: input.value };
+            });
+
+            return {
+                wakeTime,
+                mantra,
+                memo,
+                reflection,
+                priorities,
+                todos,
+                timeBlocks: timeBlockData
+            };
+        }
+
+        document.getElementById('add-priority').addEventListener('click', function () {
+            const priorityList = document.getElementById('priority-list');
+            const newItem = document.createElement('li');
+            newItem.innerHTML = '<input type="checkbox"> <input type="text" placeholder="Priority">';
+            priorityList.appendChild(newItem);
+        });
+
+        document.getElementById('remove-priority').addEventListener('click', function () {
+            const priorityList = document.getElementById('priority-list');
+            if (priorityList.children.length > 1) {
+                priorityList.removeChild(priorityList.lastElementChild);
+            }
+        });
+
+        document.getElementById('add-todo').addEventListener('click', function () {
+            const todoList = document.getElementById('todo-list');
+            const newItem = document.createElement('li');
+            newItem.innerHTML = '<input type="checkbox"> <input type="text" placeholder="To-do item">';
+            todoList.appendChild(newItem);
+        });
+
+        document.getElementById('remove-todo').addEventListener('click', function () {
+            const todoList = document.getElementById('todo-list');
+            if (todoList.children.length > 1) {
+                todoList.removeChild(todoList.lastElementChild);
+            }
+        });
+
+        document.getElementById('time-blocking-form').addEventListener('submit', function (event) {
+            event.preventDefault();  // Prevent default form submission
+
+            const formData = collectFormData();  // Collect form data as JSON
+
+            // Log the form data to see the request before sending it
+            console.log('Form Data:', formData);
+
+            // Uncomment the fetch request below to send the data
+
+            fetch('https://script.google.com/macros/s/AKfycbwT2P2AQ50YLR-UHgUNvxFB_1KSaI8BWvpNsP3cUOq-EA7VMfa7z_2SFEFw8ddBZ5igWQ/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',  // Google Apps Script uses URL-encoded by default
+                },
+                body: JSON.stringify(formData),  // Make sure your form data is sent as URL-encoded data
+            })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error('Error:', error));
+
+
+        });
+
+        function displayDate() {
+            const currentDate = new Date().toLocaleDateString();
+            document.getElementById('current-date').textContent = currentDate;
+        }
+
+        window.onload = function () {
+            createTimeBlocks();
+            displayDate();
+        };
+    </script>
+
+</body>
+
+</html>
